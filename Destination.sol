@@ -22,7 +22,7 @@ contract Destination is AccessControl {
         _grantRole(WARDEN_ROLE, admin);
     }
 
-	function createToken(address _underlying_token, string memory name, string memory symbol ) public onlyRole(CREATOR_ROLE) returns(address) {
+	function createToken(address underlying, string memory name, string memory symbol) public onlyRole(CREATOR_ROLE) returns (address) {
         require(underlying_tokens[underlying] == address(0), "Token already created");
 
         BridgeToken newToken = new BridgeToken(name, symbol, underlying);
@@ -36,7 +36,7 @@ contract Destination is AccessControl {
         return newTokenAddress;
 	}
 
-	function wrap(address _underlying_token, address _recipient, uint256 _amount ) public onlyRole(WARDEN_ROLE) {
+	function wrap(address underlying, address recipient, uint256 amount) public onlyRole(WARDEN_ROLE) {
         address bridgeTokenAddress = underlying_tokens[underlying];
         require(bridgeTokenAddress != address(0), "No wrapped token");
 
@@ -45,7 +45,7 @@ contract Destination is AccessControl {
         emit Wrap(bridgeTokenAddress, recipient, amount);
 	}
 
-	function unwrap(address _wrapped_token, address _recipient, uint256 _amount ) public {
+	function unwrap(address bridgeToken, address recipient, uint256 amount) public {
         require(wrapped_tokens[bridgeToken] != address(0), "Invalid BridgeToken");
 
         BridgeToken(bridgeToken).burnFrom(msg.sender, amount);
