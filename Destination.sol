@@ -51,7 +51,7 @@ contract Destination is AccessControl {
 
         BridgeToken(bridgeToken).burnFrom(msg.sender, amount);
 
-        emit Unwrap(bridgeToken, recipient, amount, msg.sender, block.timestamp);  // Assuming Unwrap event requires 5 arguments
+        emit Unwrap(bridgeToken, recipient, amount, msg.sender);  // Assuming Unwrap event requires 4 arguments without block.timestamp
     }
 
 
