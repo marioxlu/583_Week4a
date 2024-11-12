@@ -41,22 +41,18 @@ contract Destination is AccessControl {
         emit Unwrap(underlying_token, _wrapped_token, msg.sender, _recipient, _amount);
     }
 
-    function createToken(address _underlying_token, string memory name, string memory symbol) public onlyRole(CREATOR_ROLE) returns(address) {
-        require(wrapped_tokens[_underlying_token] == address(0), "Token already exists");
-        
-        BridgeToken wrapped_token = new BridgeToken(
-            name,
-            symbol,
-            _underlying_token,
-            address(this)
-        );
-        
-        underlying_tokens[address(wrapped_token)] = _underlying_token;
-        wrapped_tokens[_underlying_token] = address(wrapped_token);
-        tokens.push(address(wrapped_token));
-        
-        emit Creation(_underlying_token, address(wrapped_token));
-        
-        return address(wrapped_token);
-    }
+function createToken(address _underlying_token, string memory name, string memory symbol) public onlyRole(CREATOR_ROLE) returns(address) {
+    require(wrapped_tokens[_underlying_token] == address(0), "Token already exists");
+    
+    // Create new BridgeToken by passing the strings directly
+    BridgeToken wrapped_token = new BridgeToken(name, symbol, _underlying_token, address(this));
+    
+    underlying_tokens[address(wrapped_token)] = _underlying_token;
+    wrapped_tokens[_underlying_token] = address(wrapped_token);
+    tokens.push(address(wrapped_token));
+    
+    emit Creation(_underlying_token, address(wrapped_token));
+    
+    return address(wrapped_token);
+}
 }
