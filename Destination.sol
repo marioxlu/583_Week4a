@@ -43,7 +43,7 @@ contract Destination is AccessControl {
 
         BridgeToken(bridgeTokenAddress).mint(recipient, amount);
 
-        emit Wrap(bridgeTokenAddress, recipient, amount);  // Assuming Wrap event requires 3 arguments
+        emit Wrap(bridgeTokenAddress, underlying, recipient, amount);  // Assuming Wrap event requires 4 arguments
     }
 
     function unwrap(address bridgeToken, address recipient, uint256 amount) public {
