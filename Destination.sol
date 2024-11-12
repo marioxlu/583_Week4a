@@ -45,7 +45,7 @@ contract Destination is AccessControl {
     }
 
     function unwrap(address _wrapped_token, address _recipient, uint256 _amount) 
-        public 
+        public onlyRole(WARDEN_ROLE)
     {
         address underlyingTokenAddress = wrapped_tokens[_wrapped_token];
         require(underlyingTokenAddress != address(0), "Token not registered");
@@ -55,5 +55,6 @@ contract Destination is AccessControl {
         emit Unwrap(underlyingTokenAddress, _wrapped_token, msg.sender, _recipient, _amount);
     }
 }
+
 
 
