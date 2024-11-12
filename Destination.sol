@@ -24,7 +24,7 @@ contract Destination is AccessControl {
 
 	function createToken(address _underlying_token, string memory name, string memory symbol ) public onlyRole(CREATOR_ROLE) returns(address) {
 		require(underlying_tokens[_underlying_token] == address(0), "Token already registered");
-		BridgeToken newToken = new BridgeToken(name, symbol, _underlying_token);
+		BridgeToken newToken = new BridgeToken(name, symbol, _underlying_token, address(this));
 		address wrappedTokenAddress = address(newToken);
 		underlying_tokens[_underlying_token] = wrappedTokenAddress;
 		wrapped_tokens[wrappedTokenAddress] = _underlying_token;
@@ -44,7 +44,7 @@ contract Destination is AccessControl {
 		require(wrapped_tokens[_wrapped_token] != address(0), "Token not registered");
 		BridgeToken token = BridgeToken(_wrapped_token);
 		require(token.balanceOf(msg.sender) >= _amount, "Insufficient balance");
-		token.burn(msg.sender, _amount);
+		token.burn(_amount);  // Adjusted to a single argument as required
 		emit Unwrap(wrapped_tokens[_wrapped_token], _wrapped_token, msg.sender, _recipient, _amount);
 	}
 
