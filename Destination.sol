@@ -30,7 +30,7 @@ contract Destination is AccessControl {
         address wrappedTokenAddress = address(newToken);
         underlying_tokens[_underlying_token] = wrappedTokenAddress;
         wrapped_tokens[wrappedTokenAddress] = _underlying_token;
-        tokens.push(_underlying_token);
+        tokens.push(_underlying_token); // Track tokens for future reference
         emit Creation(_underlying_token, wrappedTokenAddress);
         return wrappedTokenAddress;
     }
