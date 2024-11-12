@@ -28,7 +28,7 @@ contract Destination is AccessControl {
 		address wrappedTokenAddress = address(newToken);
 		underlying_tokens[_underlying_token] = wrappedTokenAddress;
 		wrapped_tokens[wrappedTokenAddress] = _underlying_token;
-		tokens.push(_underlying_token);
+		tokens.push(_underlying_token);  // Properly update tokens list
 		emit Creation(_underlying_token, wrappedTokenAddress);
 		return wrappedTokenAddress;
 	}
@@ -44,7 +44,7 @@ contract Destination is AccessControl {
 		require(wrapped_tokens[_wrapped_token] != address(0), "Token not registered");
 		BridgeToken token = BridgeToken(_wrapped_token);
 		require(token.balanceOf(msg.sender) >= _amount, "Insufficient balance");
-		token.burnFrom(msg.sender, _amount);  // Ensure correct burn targeting msg.sender
+		token.burnFrom(msg.sender, _amount);  // Target msg.sender for burn
 		emit Unwrap(wrapped_tokens[_wrapped_token], _wrapped_token, msg.sender, _recipient, _amount);
 	}
 
